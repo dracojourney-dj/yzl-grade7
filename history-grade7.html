@@ -58,9 +58,15 @@ body {
   background: var(--surface); border: 1px solid var(--rule);
   color: var(--ink); padding: 8px 24px; border-radius: 8px;
   cursor: pointer; font-size: 0.95em; transition: all 0.25s;
+  text-decoration: none; display: inline-block;
 }
 .nav-btn:hover { border-color: var(--accent); color: var(--accent); }
 .nav-btn.active { background: var(--accent2); border-color: var(--gold); color: var(--gold); }
+.nav-btn-home {
+  border-color: var(--gold);
+  color: var(--gold);
+  margin-right: 8px;
+}
 
 .main-content { max-width: 960px; margin: 0 auto; padding: 32px 20px 60px; }
 .section { display: none; animation: fadeIn 0.4s; }
@@ -438,6 +444,7 @@ body {
 </header>
 
 <nav class="nav-bar">
+  <a href="index.html" class="nav-btn nav-btn-home">📚 科目选择</a>
   <button class="nav-btn active" data-tab="review" onclick="switchTab('review')">知识回顾</button>
   <button class="nav-btn" data-tab="quiz" onclick="switchTab('quiz')">互动测试</button>
   <button class="nav-btn" data-tab="stats" onclick="switchTab('stats')">学习统计</button>
