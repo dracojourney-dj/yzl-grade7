@@ -215,7 +215,7 @@ body {
 <div class="hero">
   <div class="badge">📚 深圳七年级上册 · 同步学习</div>
   <h1>知识学习与互动测试</h1>
-  <p class="subtitle">知识回顾 · 趣味测试 · 单元小结 · 真题演练</p>
+  <p class="subtitle">知识回顾 · 趣味测试 · 单元小结 · 错题本 · 真题演练</p>
   <p class="meta">贴合深圳中考/期末考命题方向</p>
 </div>
 
@@ -259,9 +259,20 @@ body {
     <div class="subject-name">地理</div>
     <div class="subject-desc">地球和地图、陆地海洋、天气气候、居民聚落，读图定位、数据计算、综合探究6种题型</div>
     <div class="subject-info">
-      <span class="info-item"><span class="dot"></span>4章内容</span>
+      <span class="info-item"><span class="dot"></span>5章内容</span>
       <span class="info-item"><span class="dot"></span>180道测试题</span>
       <span class="info-item"><span class="dot"></span>单元小结</span>
+    </div>
+  </a>
+
+  <a href="history-grade7.html#wrongbook" class="subject-card wrongbook-card" style="--card-accent: #ef4444; --card-bg: rgba(239,68,68,0.15);" onclick="return goToWrongBook(event)">
+    <div class="subject-icon">📕</div>
+    <div class="subject-name">错题本</div>
+    <div class="subject-desc">自动收录各科目错题，按科目分类整理，支持反复练习，答对不删除，永久保存</div>
+    <div class="subject-info">
+      <span class="info-item"><span class="dot"></span>4科汇总</span>
+      <span class="info-item"><span class="dot"></span>永久收录</span>
+      <span class="info-item" id="wb-total-count"><span class="dot"></span>0 道错题</span>
     </div>
   </a>
 
@@ -286,6 +297,11 @@ body {
       <div class="feature-desc">每单元精选真题，选择+判断+材料+探究全覆盖</div>
     </div>
     <div class="feature-card">
+      <div class="feature-icon">📕</div>
+      <div class="feature-name">错题本</div>
+      <div class="feature-desc">自动收录答错题目，按科目分类，反复练习，永久保留不删除</div>
+    </div>
+    <div class="feature-card">
       <div class="feature-icon">💾</div>
       <div class="feature-name">进度保存</div>
       <div class="feature-desc">答题中途退出自动保存，回来继续作答不丢进度</div>
@@ -306,6 +322,58 @@ body {
 <div class="footer">
   七年级上册同步学习系统 · 深圳专用 · 持续更新中
 </div>
+
+<script>
+// 错题本统计
+try {
+  var wb = localStorage.getItem('wrongbook_v1');
+  if (wb) {
+    wb = JSON.parse(wb);
+    var total = 0;
+    ['history', 'morality', 'biology', 'geography'].forEach(function(s) {
+      total += (wb[s] || []).length;
+    });
+    var el = document.getElementById('wb-total-count');
+    if (el) el.innerHTML = '<span class="dot"></span>' + total + ' 道错题';
+  }
+} catch(e) {}
+
+// 跳转到错题本（找错题最多的科目进入）
+function goToWrongBook(e) {
+  e.preventDefault();
+  try {
+    var wb = localStorage.getItem('wrongbook_v1');
+    var target = 'history-grade7.html#wrongbook';
+    if (wb) {
+      wb = JSON.parse(wb);
+      var subjects = [
+        { id: 'history', page: 'history-grade7.html' },
+        { id: 'morality', page: 'morality-grade7.html' },
+        { id: 'biology', page: 'biology-grade7.html' },
+        { id: 'geography', page: 'geography-grade7.html' }
+      ];
+      var maxCount = 0;
+      var maxPage = subjects[0].page;
+      for (var i = 0; i < subjects.length; i++) {
+        var c = (wb[subjects[i].id] || []).length;
+        if (c > maxCount) { maxCount = c; maxPage = subjects[i].page; }
+      }
+      if (maxCount > 0) target = maxPage + '#wrongbook';
+    }
+    window.location.href = target;
+  } catch(e) {
+    window.location.href = 'history-grade7.html#wrongbook';
+  }
+  return false;
+}
+
+// 如果 URL 带 #wrongbook 且是科目页面，自动打开错题本
+window.addEventListener('load', function() {
+  if (location.hash === '#wrongbook' && typeof showWrongBook === 'function') {
+    setTimeout(showWrongBook, 200);
+  }
+});
+</script>
 
 </body>
 </html>
